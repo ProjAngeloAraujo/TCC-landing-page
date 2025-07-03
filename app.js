@@ -1,18 +1,32 @@
-const items = document.querySelectorAll('.item');
-let current = 0;
+const carrosselInner = document.querySelector('.carrossel-inner');
+const items = document.querySelectorAll('.carrossel-inner .item');
+let currentIndex = 0;
 
-function showSlide(index) {
-  items.forEach((item, i) => {
-    item.classList.toggle('active', i === index);
-  });
+function updateSlide() {
+  const width = document.querySelector('.carrossel-viewport').offsetWidth;
+  carrosselInner.style.transform = `translateX(-${currentIndex * width}px)`;
 }
 
+// Avançar
 document.getElementById('next').addEventListener('click', () => {
-  current = (current + 1) % items.length;
-  showSlide(current);
+  currentIndex = (currentIndex + 1) % items.length;
+  updateSlide();
 });
 
+// Voltar
 document.getElementById('prev').addEventListener('click', () => {
-  current = (current - 1 + items.length) % items.length;
-  showSlide(current);
+  currentIndex = (currentIndex - 1 + items.length) % items.length;
+  updateSlide();
 });
+
+// Troca automática a cada 10s
+setInterval(() => {
+  currentIndex = (currentIndex + 1) % items.length;
+  updateSlide();
+}, 10000);
+
+// Ajustar ao redimensionar
+window.addEventListener('resize', updateSlide);
+
+// Inicializar
+updateSlide();
